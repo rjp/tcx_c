@@ -37,6 +37,8 @@ struct lap_s
     char *trigger;
     int c_points;
     int c_tracks;
+    int watts_max;
+    float watts_avg;
     track_t *tracks;
     struct lap_s *next;
 };
@@ -47,6 +49,8 @@ struct activity_s {
     char *date;
     int epoch_date;
     lap_t *laps;
+    char *creator;
+    char *unitid;
     struct activity_s *next;
     struct trackpoint_s *last_point;
 };
