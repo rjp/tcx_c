@@ -4,6 +4,9 @@
 
 #include "tcxparser.h"
 
+#define TAG(q,y,z,v) if (! strcmp( chain, #q ) ) { y->z = v; }
+
+
 extern tcx_t tcxfile;
 extern lap_t *laps;
 
