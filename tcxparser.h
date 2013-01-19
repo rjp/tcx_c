@@ -1,5 +1,6 @@
 struct trackpoint_s
 {
+    char *time;
     int time_epoch;
     float latitude;
     float longitude;
@@ -47,6 +48,7 @@ struct activity_s {
     int epoch_date;
     lap_t *laps;
     struct activity_s *next;
+    struct trackpoint_s *last_point;
 };
 typedef struct activity_s activity_t;
 
