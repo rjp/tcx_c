@@ -2,6 +2,7 @@
 #include <unistd.h>
 #include <string.h>
 #include <stdio.h>
+#include <math.h>
 
 #include "tcxparser.h"
 
@@ -27,6 +28,13 @@ void *safe_malloc(size_t size)
 trackpoint_t *new_trackpoint_t(void)
 {
     trackpoint_t *tmp = (trackpoint_t *)safe_malloc(sizeof(trackpoint_t));
+    /* markers to indicate we've not set these values */
+    tmp->latitude = NAN;
+    tmp->watts = -1;
+    tmp->altitude = NAN;
+    tmp->speed = NAN;
+    tmp->bpm = -1;
+    tmp->distance = NAN;
     return tmp;
 }
 

@@ -1,11 +1,13 @@
 #include <mxml.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <math.h>
 
 #include "tcxparser.h"
 
 #define TAG(q,y,z,v) if (! strcmp( chain, #q ) ) { y->z = v; }
-
+#define SETIF_F(x,y,z) if(! isnan(x->y)) { x->has.z = 1; }
+#define SETIF_P(x,y,z) if(x->y >= 0) { x->has.z = 1; }
 
 extern tcx_t tcxfile;
 extern lap_t *laps;
@@ -107,6 +109,11 @@ sax_cb(mxml_node_t *node, mxml_sax_event_t event, void *data)
 
         if(! strcmp(chain, "Track:Trackpoint")) {
             current_activity->last_point = current_trackpoint;
+            SETIF_F(current_trackpoint, latitude, geo);
+            SETIF_F(current_trackpoint, altitude, altitude);
+            SETIF_F(current_trackpoint, distance, distance);
+            SETIF_F(current_trackpoint, speed, speed);
+            SETIF_P(current_trackpoint, watts, watts);
         }
     }
 }

@@ -10,6 +10,14 @@ struct trackpoint_s
     int cadence;
     float speed;
     int watts;
+    struct {
+        int geo;
+        int watts;
+        int altitude;
+        int distance;
+        int cadence;
+        int speed;
+    } has;
     struct trackpoint_s *next;
 };
 typedef struct trackpoint_s trackpoint_t;
@@ -39,6 +47,7 @@ struct lap_s
     int c_tracks;
     int watts_max;
     float watts_avg;
+    float fat_calories;
     track_t *tracks;
     struct lap_s *next;
 };
