@@ -142,6 +142,7 @@ printf("Multisport? %s\n", tcxfile.multisport ? "Yes" : "No");
             lap_t *i;
             printf("Activity %s %p\n", j->type, j->laps);
             for(i=j->laps; i; i = i->next) {
+                track_t *tr;
                 printf("Lap %d: %.2f metres, %d tracks, %d points, max=%.2f bpm avg=%d max=%d intensity=%s\n",
                     lc+1, i->distance, i->c_tracks, i->c_points,
                     i->speed_max, i->bpm_avg, i->bpm_max, i->intensity);
@@ -149,6 +150,22 @@ printf("Multisport? %s\n", tcxfile.multisport ? "Yes" : "No");
                 tt = tt + i->seconds;
                 calories += i->calories;
                 lc++;
+
+                for(tr=i->tracks; tr; tr=tr->next) {
+                    trackpoint_t *tp;
+                    for(tp=tr->points; tp; tp=tp->next) {
+                        if (tp->has.geo) {
+                            fprintf(stderr, "GPS,%f,%f,",tp->latitude,tp->longitude);
+                        } else {
+                            fprintf(stderr, "GPS,BOGUS,BOGUS,");
+                        }
+                        fprintf(stderr, "%d,%s,%s,", lc, tp->time, j->type);
+                        if (tp->has.watts) {
+                            fprintf(stderr, "%d", tp->watts);
+                        }
+                        fprintf(stderr, "\n");
+                    }
+                }
             }
             printf("%.2f %.2f %s %d %s\n", td, tt, j->type, calories, j->date);
             printf("LP %p %s\n", j, j->last_point->time);
