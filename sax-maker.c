@@ -21,7 +21,16 @@ char chain[1024];
 void
 sax_cb(mxml_node_t *node, mxml_sax_event_t event, void *data)
 {
-    const char *node_name = mxmlGetElement(node);
+    char tmp[1024];
+    const char *node_name = tmp;
+    const char *element = mxmlGetElement(node);
+
+    if (element) {
+        strncpy(tmp, mxmlGetElement(node), 1024);
+        if (strchr(tmp, ':')) { /* BLOODY NAMESPACES */
+            strsep((char **)&node_name, ":");
+        }
+    }
 
     if (event == MXML_SAX_DATA) {
         const char *x = mxmlGetText(node, NULL);
