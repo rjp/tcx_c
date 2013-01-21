@@ -37,9 +37,20 @@ sax_cb(mxml_node_t *node, mxml_sax_event_t event, void *data)
         sprintf(chain, "%s:%s", current_tag[tag_ptr-1], current_tag[tag_ptr]);
 
         /* Activity_t */
-        if(! strcmp(chain, "Activity:Id")) {
-            current_activity->date = strdup(x);
-        }
+        TAG(Activity:Id, current_activity, date, strdup(x));
+
+        /* ActivityLap_t */
+        TAG(Lap:TotalTimeSeconds, current_lap, seconds, atof(x));
+        TAG(Lap:Calories, current_lap, calories, atoi(x));
+        TAG(Lap:TotalTimeSeconds, current_lap, seconds, atof(x));
+        TAG(Lap:MaximumSpeed, current_lap, speed_max, atof(x));
+        TAG(AverageHeartRateBpm:Value, current_lap, bpm_avg, atoi(x));
+        TAG(MaximumHeartRateBpm:Value, current_lap, bpm_max, atoi(x));
+        TAG(Lap:Intensity, current_lap, intensity, strdup(x));
+        TAG(Lap:Cadence, current_lap, cadence, atoi(x));
+        TAG(LX:AvgWatts, current_lap, watts_avg, atof(x));
+        TAG(LX:MaxWatts, current_lap, watts_max, atoi(x));
+        TAG(FatCalories:Value, current_lap, fat_calories, atof(x));
 
         if (! strcmp(current_tag[tag_ptr], "DistanceMeters")) {
             if (! strcmp(current_tag[tag_ptr-1], "Lap")) {
@@ -50,34 +61,17 @@ sax_cb(mxml_node_t *node, mxml_sax_event_t event, void *data)
             }
         }
 
-        /* ActivityLap_t */
-        if(! strcmp(chain, "Lap:TotalTimeSeconds")) {
-            current_lap->seconds = atof(x);
-        }
-        if(! strcmp(chain, "Lap:Calories")) {
-            current_lap->calories = atoi(x);
-        }
-        if(! strcmp(chain, "Lap:TotalTimeSeconds")) {
-            current_lap->seconds = atof(x);
-        }
-        if(! strcmp(chain, "Lap:MaximumSpeed")) {
-            current_lap->speed_max = atof(x);
-        }
-        if(! strcmp(chain, "AverageHeartRateBpm:Value")) {
-            current_lap->bpm_avg = atoi(x);
-        }
-        if(! strcmp(chain, "MaximumHeartRateBpm:Value")) {
-            current_lap->bpm_max = atoi(x);
-        }
-        if(! strcmp(chain, "Lap:Intensity")) {
-            current_lap->intensity = strdup(x);
-        }
-        if(! strcmp(chain, "Lap:Cadence")) {
-            current_lap->cadence = atoi(x);
-        }
-        if (! strcmp(chain, "Trackpoint:Time")) {
-            current_trackpoint->time = strdup(x);
-        }
+
+        /* Trackpoint_t */
+        TAG(Trackpoint:Time, current_trackpoint, time, strdup(x));
+        TAG(Position:LatitudeDegrees, current_trackpoint, latitude, atof(x));
+        TAG(Position:LongitudeDegrees, current_trackpoint, longitude, atof(x));
+        TAG(Trackpoint:Cadence, current_trackpoint, cadence, atoi(x));
+        TAG(Trackpoint:Time, current_trackpoint, time, strdup(x));
+        TAG(Trackpoint:AltitudeMeters, current_trackpoint, altitude, atof(x));
+        TAG(HeartRateBpm:Value, current_trackpoint, bpm, atoi(x));
+        TAG(TPX:Speed, current_trackpoint, speed, atof(x));
+        TAG(TPX:Watts, current_trackpoint, watts, atof(x));
     }
 
     if (event == MXML_SAX_ELEMENT_OPEN) {
