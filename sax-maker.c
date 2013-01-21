@@ -78,10 +78,12 @@ sax_cb(mxml_node_t *node, mxml_sax_event_t event, void *data)
         tag_ptr++;
         strcpy(current_tag[tag_ptr], node_name);
         sprintf(chain, "%s:%s", current_tag[tag_ptr-1], current_tag[tag_ptr]);
+//        printf("<%s>\n", node_name);
 
         if(! strcmp(chain, "Activities:MultiSportSession")) {
             tcxfile.multisport = 1;
         }
+        /* Ignore our parent here */
         if(! strcmp(node_name, "Activity")) {
             const char *t = mxmlElementGetAttr(node, "Sport");
             activity_t *tmp = new_activity_t();
@@ -129,7 +131,7 @@ int main(int argc, char **argv)
     fp = fopen(argv[1], "r");
     tree = mxmlSAXLoadFile(NULL, fp, MXML_TEXT_CALLBACK, sax_cb, NULL);
     fclose(fp);
-    
+
     {
         activity_t *j = tcxfile.activities;
 
